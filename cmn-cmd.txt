@@ -1,0 +1,9 @@
+#add to repo
+
+git add name
+#Stages the folder/file to be added
+
+git commit -m "initial commit"
+#Commit the folder/file with message
+
+git push
