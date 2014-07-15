@@ -49,3 +49,9 @@ head(cr)
 
 cr <- corr("specdata")
 summary(cr)
+
+
+library(datasets)
+data(mtcars)
+with(mtcars, tapply(mpg, cyl, mean))
+sapply(split(mtcars$mpg, mtcars$cyl), mean)
