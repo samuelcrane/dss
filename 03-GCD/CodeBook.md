@@ -135,11 +135,11 @@ One file, `har_tidy_narrow.txt`, is output by the script.
   <td>feature</td>
   <td>The name of the feature variable.</td>
  </tr>
-  <tr>
+ <tr>
   <td>mean_value</td>
   <td>The computed mean of the feature variable for each subject and activity.</td>
  </tr>
- </table>
+</table>
  
 
 Variable Description
