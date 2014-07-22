@@ -51,4 +51,4 @@ har_tidy_narrow <- melt(har_tidy_wide,id=c("subject_id","activity"),measure.vars
 colnames(har_tidy_narrow) <- c("subject_id","activity","feature","mean_value")
 
 # Step 9: Save output
-write.csv(HAR_tidy_narrow, file = "har_tidy_narrow.txt")
+write.csv(har_tidy_narrow, file = "har_tidy_narrow.txt", row.names=FALSE)
