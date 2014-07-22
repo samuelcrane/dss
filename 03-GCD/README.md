@@ -27,8 +27,8 @@ Repo Files
 * [README.md] - This file.
 * [CodeBook.md] - File describing the data in HAR-tidy.csv
 * [/UCI_HAR_Dataset] - Directory containing the original dataset
-* [run_analysis.R] - This is an R scipt containing the commands used to processing the data in /UCI_HAR_Dataset and produce the HAR_tidy.csv file.
-* [HAR_tidy_narrow.csv] - The output tidy dataset, containing the averages of mean and std for each subject and activity. 
+* [run_analysis.R] - This is an R scipt containing the commands used to process the UCO HAR dataset and produce the `HAR_tidy_narrow.txt` file.
+
 
 Original Data Source
 ----
@@ -43,14 +43,13 @@ Original Data Source
 
 The R packages `plyr` and `reshape2` are required to run this script. Package installation:
 
-```{r}
-install.package("plyr")```
+```install.package("plyr")```
 
-```{r}
-install.package("reshape2")```
+```install.package("reshape2")```
 
 
 
 [README.md]:https://github.com/samuelcrane/dss/tree/master/03-GCD
+[CodeBook.md]:https://github.com/samuelcrane/dss/blob/master/03-GCD/CodeBook.md
 [/UCI_HAR_Dataset]:https://github.com/samuelcrane/dss/tree/master/03-GCD/UCI_HAR_Dataset
 [run_analysis.R]:https://github.com/samuelcrane/dss/blob/master/03-GCD/run_analysis.R
