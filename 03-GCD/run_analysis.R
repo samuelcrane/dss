@@ -1,8 +1,6 @@
 library("plyr")
 library("reshape2")
 
-setwd('~/Dropbox/dss/03-GCD/')
-
 # Step 1: Load input files
 X_train <- read.table('UCI_HAR_Dataset/train/X_train.txt')
 X_test <- read.table('UCI_HAR_Dataset/test/X_test.txt')
@@ -50,23 +48,7 @@ har_tidy_wide <- dcast(har_narrow, subject_id + activity  ~ variable,mean)
 
 # Step 8: Make data set tidy and narrow
 har_tidy_narrow <- melt(har_tidy_wide,id=c("subject_id","activity"),measure.vars=colnames(har_tidy_wide[3:68]))
+colnames(har_tidy_narrow) <- c("subject_id","activity","feature","mean_value")
 
 # Step 9: Save output
-write.csv(HAR_tidy_narrow, file = "HAR_tidy_narrow.csv")
-
-# Ignore:
-> mean_variables <- colnames(HAR_mean_std)
-> mean_variables <- gsub("tBody","timeBodySignals",mean_variables)
-> mean_variables <- gsub("tGravity","timeGravitySignals",mean_variables)
-> mean_variables <- gsub("fBody","frequencyBodySignals",mean_variables)
-> mean_variables <- gsub("Acc","Acceleration",mean_variables)
-> mean_variables <- gsub("Gyro","Gyroscope",mean_variables)
-> mean_variables <- gsub("Mag","Magnitude",mean_variables)
-> mean_variables <- gsub("Jerk","JerkSignals",mean_variables)
-> mean_variables <- gsub("-mean\\(\\)","_mean",mean_variables)
-> mean_variables <- gsub("-std\\(\\)","_std",mean_variables)
-> mean_variables <- gsub("-X","_Xaxis",mean_variables)
-> mean_variables <- gsub("-Y","_Yaxis",mean_variables)
-> mean_variables <- gsub("-Z","_Zaxis",mean_variables)
-> mean_variables
-write.csv(mean_variables, file = "mean_variables.csv")
+write.csv(HAR_tidy_narrow, file = "har_tidy_narrow.txt")
