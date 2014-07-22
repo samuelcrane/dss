@@ -81,20 +81,22 @@ Data Processing Steps
 1. Loads the input files into R
 2. Merges the three test and three train files into a single data table for each component
 3. Uses the look up tables where necessary to assign textual columns headings
-4. Transforms the textual column headings where necessary to increase reability and R-friendliness
-5. Merges the three component datasets into one large data set.
-6. Subsets the large data set to contain only mean and standard deviation features.
+4. Subsets the large data set to contain only mean and standard deviation features.
+5. Transforms the textual column headings to make them more readable and descriptive.
+6. Merges the three component datasets into one large data set.
 7. Computes the means of each feature, grouped by subject and activity.
 8. Makes the new data set tidy and narrow.
 9. Saves this tidy data set as `har_tidy_narrow.csv`.
 
 #####Notes:
-* Step 4: I have maintained the overall structure of the variable textual names provided in the `features.txt` file. I removed the parentheses and dashes from the variables names to make them more R-friendly. I think these variable names are descriptive enough that an experience user of this data set could reasoanbly be expected to understand the variable names with abbrevations. Further details about each is given in the Variable Description section below. 
-* Step 6: Using the grep() function, two types of features that contain a mean could be recovered: mean() and meanFreq(). The latter is a mean of all the frequency domain signals, rather than a mean of each pattern (wether time domain or frequency domain). I have chosen to only retain the former mean values and ignore the meanFreq() values. 
+* Step 4: Using the grep() function, two types of features that contain a mean could be recovered: mean() and meanFreq(). The latter is a mean of all the frequency domain signals, rather than a mean of each pattern (wether time domain or frequency domain). I have chosen to only retain the former mean values and ignore the meanFreq() values. 
+* Step 5: I have maintained the overall structure of the variable textual names provided in the `features.txt` file. I removed the parentheses and dashes from the variables names to make them more R-friendly. I think these variable names are descriptive enough that an experience user of this data set could reasoanbly be expected to understand the variable names with abbrevations. These coumn header names are more descriptive than the default ones created by R (V1, etc) and have the added value of being easiy cross referenced against the original database. Further details about each is given in the Variable Description section below. 
+* Step 7: One mean value is produced for each activity performed by each person. 
+
 
 Output
 -----------
-One file, `har_tidy_narrow.csv`, is output by the script. 
+One file, `har_tidy_narrow.txt`, is output by the script. 
 
 <table>
  <col>
@@ -106,12 +108,13 @@ One file, `har_tidy_narrow.csv`, is output by the script.
   <td>Description</td>
  </tr>
  <tr>
-  <td>har_tidy_narrow.csv</td>
+  <td>har_tidy_narrow.txt</td>
   <td>11880 x 4</td>
-  <td>Tidy data set of the mean per activity, per subject of the mean and Standard deviation of the Human Activity Recognition Using Smartphones Dataset</td>
+  <td>Tidy, comma-seprated data set of the mean per activity, per subject of the mean and Standard deviation of the Human Activity Recognition Using Smartphones Dataset</td>
  </tr>
  </table>
 
+#####Description of columns in output file:
 <table>
  <col>
  <col>
@@ -128,7 +131,7 @@ One file, `har_tidy_narrow.csv`, is output by the script.
   <td>Name of the activity</td>
  </tr>
   <tr>
-  <td>variable</td>
+  <td>feature</td>
   <td>The name of the feature variable.</td>
  </tr>
   <tr>
@@ -139,13 +142,13 @@ One file, `har_tidy_narrow.csv`, is output by the script.
 Variable Description
 -----------
 
-There are three categories of variables: features, activities, and subjects. This section provides an explanation of each variable as it is provided in the tidy output data set
+There are three categories of variables: features, activities, and subjects. This section provides an explanation of each variable as it is provided in the tidy output data file.
 
-##### Subjects
+### Subjects
 There were 30 subjects, identified by a numeric code between 1-30.
 
-##### Activities
-Physical activities were classified by charcter strings:
+### Activities
+Physical activities are classified by charcter strings:
 
 * walking
 * walking_upstairs
@@ -154,337 +157,280 @@ Physical activities were classified by charcter strings:
 * standing
 * laying 
 
-##### Features
-Original descirption of how each feature was derived:
-> The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
+### Features
+See the [UCI HAR documentation](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones) for information about how each feature variable was collected and processed. The table below describes the features in the variables column of the output data. 
 
-> Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
-
-> Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
-
-> These signals were used to estimate variables of the feature vector for each pattern: '-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
-Descriptions of the variables found in the har_tidy_narrow.csv dataset:
-
-The Features described above:
-
-* tBodyAcc-XYZ
-* tGravityAcc-XYZ
-* tBodyAccJerk-XYZ
-* tBodyGyro-XYZ
-* tBodyGyroJerk-XYZ
-* tBodyAccMag
-* tGravityAccMag
-* tBodyAccJerkMag
-* tBodyGyroMag
-* tBodyGyroJerkMag
-* fBodyAcc-XYZ
-* fBodyAccJerk-XYZ
-* fBodyGyro-XYZ
-* fBodyAccMag
-* fBodyAccJerkMag
-* fBodyGyroMag
-* fBodyGyroJerkMag
+**A note about units:** As per the original data source, all feature variables are normalized and bounded within [-1,1]
 
 <table>
  <col>
  <col>
- <col>
  <tr>
-  <td>Variable</td>
-  <td>Unit</td>
+  <td>Feature</td>
   <td>Description</td>
  </tr>
  <tr>
-  <td>subject_id</td>
-  <td></td>
-  <td></td>
- </tr>
- <tr>
-  <td>activity_id</td>
-  <td></td>
-  <td></td>
- </tr>
- <tr>
-  <td>activity</td>
-  <td></td>
- </tr>
- <tr>
   <td>tBodyAccMeanX</td>
-  <td></td>
+  <td>Time Body Signals Acceleration Mean X Axis</td>
  </tr>
  <tr>
   <td>tBodyAccMeanY</td>
-  <td></td>
+  <td>Time Body Signals Acceleration Mean Y Axis</td>
  </tr>
  <tr>
   <td>tBodyAccMeanZ</td>
-  <td></td>
+  <td>Time Body Signals Acceleration Mean Z Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyAccStdX</td>
+  <td>Time Body Signals Acceleration std X Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyAccStdY</td>
+  <td>Time Body Signals Acceleration std Y Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyAccStdZ</td>
+  <td>Time Body Signals Acceleration std Z Axis</td>
  </tr>
  <tr>
   <td>tGravityAccMeanX</td>
-  <td></td>
+  <td>Time Gravity Signals Acceleration Mean X Axis</td>
  </tr>
  <tr>
   <td>tGravityAccMeanY</td>
-  <td></td>
+  <td>Time Gravity Signals Acceleration Mean Y Axis</td>
  </tr>
  <tr>
   <td>tGravityAccMeanZ</td>
-  <td></td>
+  <td>Time Gravity Signals Acceleration Mean Z Axis</td>
+ </tr>
+ <tr>
+  <td>tGravityAccStdX</td>
+  <td>Time Gravity Signals Acceleration std X Axis</td>
+ </tr>
+ <tr>
+  <td>tGravityAccStdY</td>
+  <td>Time Gravity Signals Acceleration std Y Axis</td>
+ </tr>
+ <tr>
+  <td>tGravityAccStdZ</td>
+  <td>Time Gravity Signals Acceleration std Z Axis</td>
  </tr>
  <tr>
   <td>tBodyAccJerkMeanX</td>
-  <td></td>
+  <td>Time Body Signals Acceleration Jerk Signals Mean X Axis</td>
  </tr>
  <tr>
   <td>tBodyAccJerkMeanY</td>
-  <td></td>
+  <td>Time Body Signals Acceleration Jerk Signals Mean Y Axis</td>
  </tr>
  <tr>
   <td>tBodyAccJerkMeanZ</td>
-  <td></td>
+  <td>Time Body Signals Acceleration Jerk Signals Mean Z Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyAccJerkStdX</td>
+  <td>Time Body Signals Acceleration Jerk Signals std X Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyAccJerkStdY</td>
+  <td>Time Body Signals Acceleration Jerk Signals std Y Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyAccJerkStdZ</td>
+  <td>Time Body Signals Acceleration Jerk Signals std Z Axis</td>
  </tr>
  <tr>
   <td>tBodyGyroMeanX</td>
-  <td></td>
+  <td>Time Body Signals Gyroscope Mean X Axis</td>
  </tr>
  <tr>
   <td>tBodyGyroMeanY</td>
-  <td></td>
+  <td>Time Body Signals Gyroscope Mean Y Axis</td>
  </tr>
  <tr>
   <td>tBodyGyroMeanZ</td>
-  <td></td>
+  <td>Time Body Signals Gyroscope Mean Z Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyGyroStdX</td>
+  <td>Time Body Signals Gyroscope std X Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyGyroStdY</td>
+  <td>Time Body Signals Gyroscope std Y Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyGyroStdZ</td>
+  <td>Time Body Signals Gyroscope std Z Axis</td>
  </tr>
  <tr>
   <td>tBodyGyroJerkMeanX</td>
-  <td></td>
+  <td>Time Body Signals Gyroscope Jerk Signals Mean X Axis</td>
  </tr>
  <tr>
   <td>tBodyGyroJerkMeanY</td>
-  <td></td>
+  <td>Time Body Signals Gyroscope Jerk Signals Mean Y Axis</td>
  </tr>
  <tr>
   <td>tBodyGyroJerkMeanZ</td>
-  <td></td>
+  <td>Time Body Signals Gyroscope Jerk Signals Mean Z Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyGyroJerkStdX</td>
+  <td>Time Body Signals Gyroscope Jerk Signals std X Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyGyroJerkStdY</td>
+  <td>Time Body Signals Gyroscope Jerk Signals std Y Axis</td>
+ </tr>
+ <tr>
+  <td>tBodyGyroJerkStdZ</td>
+  <td>Time Body Signals Gyroscope Jerk Signals std Z Axis</td>
  </tr>
  <tr>
   <td>tBodyAccMagMean</td>
-  <td></td>
+  <td>Time Body Signals Acceleration Magnitude Mean</td>
+ </tr>
+ <tr>
+  <td>tBodyAccMagStd</td>
+  <td>Time Body Signals Acceleration Magnitude std</td>
  </tr>
  <tr>
   <td>tGravityAccMagMean</td>
-  <td></td>
+  <td>Time Gravity Signals Acceleration Magnitude Mean</td>
  </tr>
  <tr>
-  <td>tBodyAccJerkMagMean</td>
-  <td></td>
+  <td>tGravityAccMagStd</td>
+  <td>Time Gravity Signals Acceleration Magnitude std</td>
+ </tr>
+ <tr>
+  <td>tBodyAccJerkMagMean</span></td>
+  <td>Time Body Signals Acceleration Jerk Signals Magnitude Mean</span></td>
+ </tr>
+ <tr>
+  <td>tBodyAccJerkMagStd</td>
+  <td>Time Body Signals Acceleration Jerk Signals Magnitude std</span></td>
  </tr>
  <tr>
   <td>tBodyGyroMagMean</td>
-  <td></td>
+  <td>Time Body Signals Gyroscope Magnitude Mean</td>
  </tr>
  <tr>
-  <td>tBodyGyroJerkMagMean</td>
-  <td></td>
+  <td>tBodyGyroMagStd</td>
+  <td>Time Body Signals Gyroscope Magnitude std</td>
+ </tr>
+ <tr>
+  <td>tBodyGyroJerkMagMean</span></td>
+  <td>Time Body Signals Gyroscope Jerk Signals Magnitude Mean</span></td>
+ </tr>
+ <tr>
+  <td>tBodyGyroJerkMagStd</td>
+  <td>Time Body Signals Gyroscope Jerk Signals Magnitude std</td>
  </tr>
  <tr>
   <td>fBodyAccMeanX</td>
-  <td></td>
+  <td>Frequency Body Signals Acceleration Mean X Axis</td>
  </tr>
  <tr>
   <td>fBodyAccMeanY</td>
-  <td></td>
+  <td>Frequency Body Signals Acceleration Mean Y Axis</td>
  </tr>
  <tr>
   <td>fBodyAccMeanZ</td>
-  <td></td>
+  <td>Frequency Body Signals Acceleration Mean Z Axis</td>
+ </tr>
+ <tr>
+  <td>fBodyAccStdX</td>
+  <td>Frequency Body Signals Acceleration std X Axis</td>
+ </tr>
+ <tr>
+  <td>fBodyAccStdY</td>
+  <td>Frequency Body Signals Acceleration std Y Axis</td>
+ </tr>
+ <tr>
+  <td>fBodyAccStdZ</td>
+  <td>Frequency Body Signals Acceleration std Z Axis</td>
  </tr>
  <tr>
   <td>fBodyAccJerkMeanX</td>
-  <td></td>
+  <td>Frequency Body Signals Acceleration Jerk Signals Mean X Axis</span></td>
  </tr>
  <tr>
   <td>fBodyAccJerkMeanY</td>
-  <td></td>
+  <td>Frequency Body Signals Acceleration Jerk Signals Mean Y Axis</span></td>
  </tr>
  <tr>
   <td>fBodyAccJerkMeanZ</td>
-  <td></td>
+  <td>Frequency Body Signals Acceleration Jerk Signals Mean Z Axis</span></td>
+ </tr>
+ <tr>
+  <td>fBodyAccJerkStdX</td>
+  <td>Frequency Body Signals Acceleration Jerk Signals std X Axis</span></td>
+ </tr>
+ <tr>
+  <td>fBodyAccJerkStdY</td>
+  <td>Frequency Body Signals Acceleration Jerk Signals std Y Axis</span></td>
+ </tr>
+ <tr>
+  <td>fBodyAccJerkStdZ</td>
+  <td>Frequency Body Signals Acceleration Jerk Signals std Z Axis</span></td>
  </tr>
  <tr>
   <td>fBodyGyroMeanX</td>
-  <td></td>
+  <td>Frequency Body Signals Gyroscope Mean X Axis</td>
  </tr>
  <tr>
   <td>fBodyGyroMeanY</td>
-  <td></td>
+  <td>Frequency Body Signals Gyroscope Mean Y Axis</td>
  </tr>
  <tr>
   <td>fBodyGyroMeanZ</td>
-  <td></td>
+  <td>Frequency Body Signals Gyroscope Mean Z Axis</td>
+ </tr>
+ <tr>
+  <td>fBodyGyroStdX</td>
+  <td>Frequency Body Signals Gyroscope std X Axis</td>
+ </tr>
+ <tr>
+  <td>fBodyGyroStdY</td>
+  <td>Frequency Body Signals Gyroscope std Y Axis</td>
+ </tr>
+ <tr>
+  <td>fBodyGyroStdZ</td>
+  <td>Frequency Body Signals Gyroscope std Z Axis</td>
  </tr>
  <tr>
   <td>fBodyAccMagMean</td>
-  <td></td>
+  <td>Frequency Body Signals Acceleration Magnitude Mean</td>
  </tr>
  <tr>
-  <td>fBodyAccJerkMagMean</td>
-  <td></td>
+  <td>fBodyAccMagStd</td>
+  <td>Frequency Body Signals Acceleration Magnitude std</td>
+ </tr>
+ <tr>
+  <td>fBodyAccJerkMagMean</span></td>
+  <td>Frequency Body Signals Acceleration Jerk Signals Magnitude Mean</span></td>
+ </tr>
+ <tr>
+  <td>fBodyAccJerkMagStd</td>
+  <td>Frequency Body Signals Acceleration Jerk Signals Magnitude std</span></td>
  </tr>
  <tr>
   <td>fBodyGyroMagMean</td>
-  <td></td>
+  <td>Frequency Body Signals Gyroscope Magnitude Mean</td>
  </tr>
  <tr>
-  <td>fBodyGyroJerkMagMean</td>
-  <td></td>
+  <td>fBodyGyroMagStd</td>
+  <td>Frequency Body Signals Gyroscope Magnitude std</td>
  </tr>
  <tr>
-  <td>tBodyAccstdX</td>
-  <td></td>
+  <td>fBodyGyroJerkMagMean</span></td>
+  <td>Frequency Body Signals Gyroscope Jerk Signals Magnitude Mean</span></td>
  </tr>
  <tr>
-  <td>tBodyAccstdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyAccstdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tGravityAccstdX</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tGravityAccstdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tGravityAccstdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyAccJerkstdX</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyAccJerkstdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyAccJerkstdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyrostdX</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyrostdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyrostdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyroJerkstdX</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyroJerkstdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyroJerkstdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyAccMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tGravityAccMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyAccJerkMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyroMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>tBodyGyroJerkMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccstdX</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccstdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccstdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccJerkstdX</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccJerkstdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccJerkstdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyGyrostdX</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyGyrostdY</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyGyrostdZ</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyAccJerkMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyGyroMagstd</td>
-  <td></td>
- </tr>
- <tr>
-  <td>fBodyGyroJerkMagstd</td>
-  <td></td>
+  <td>fBodyGyroJerkMagStd</td>
+  <td>Frequency Body Signals Gyroscope Jerk Signals Magnitude std</span></td>
  </tr>
 </table>
-
-
-
-
-[john gruber]:http://daringfireball.net/
-[@thomasfuchs]:http://twitter.com/thomasfuchs
-[1]:http://daringfireball.net/projects/markdown/
-[marked]:https://github.com/chjj/marked
-[Ace Editor]:http://ace.ajax.org
-[node.js]:http://nodejs.org
-[Twitter Bootstrap]:http://twitter.github.com/bootstrap/
-[keymaster.js]:https://github.com/madrobby/keymaster
-[jQuery]:http://jquery.com
-[@tjholowaychuk]:http://twitter.com/tjholowaychuk
-[express]:http://expressjs.com
