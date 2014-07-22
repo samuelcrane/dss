@@ -3,55 +3,70 @@ library("reshape2")
 
 setwd('~/Dropbox/dss/03-GCD/')
 
-# Merge X train and X test datasets, label variables
-X_test <- read.table('UCI_HAR_Dataset/test/X_test.txt')
+# Step 1: Load input files
 X_train <- read.table('UCI_HAR_Dataset/train/X_train.txt')
-X <- rbind(X_train,X_test)
-# REQUIREMENT: Appropriately labels the data set with descriptive variable names. 
+X_test <- read.table('UCI_HAR_Dataset/test/X_test.txt')
+y_train <- read.table('UCI_HAR_Dataset/train/y_train.txt')
+y_test <- read.table('UCI_HAR_Dataset/test/y_test.txt')
+subject_train <- read.table('UCI_HAR_Dataset/train/subject_train.txt')
+subject_test <- read.table('UCI_HAR_Dataset/test/subject_test.txt')
+activities <- read.table('UCI_HAR_Dataset/activity_labels.txt')
 features <- read.table('UCI_HAR_Dataset/features.txt')
+
+# Step 2: Merge train and test data sets
+X <- rbind(X_train,X_test)
+y <- rbind(y_train,y_test)
+subject <- rbind(subject_train,subject_test)
+
+#Step 3: Assign column headers
 colnames(features) <- c('id','name')
 colnames(X) <- features$name
-
-# Merge y train and y test datasets, add activity names
-y_test <- read.table('UCI_HAR_Dataset/test/y_test.txt')
-y_train <- read.table('UCI_HAR_Dataset/train/y_train.txt')
-y <- rbind(y_train,y_test)
 colnames(y) <- 'activity_id'
-# REQUIREMENT: Uses descriptive activity names to name the activities in the data set
-activities <- read.table('UCI_HAR_Dataset/activity_labels.txt')
 colnames(activities) <- c('activity_id','activity')
 y <- join(y,activities)
-
-# Merge X and y datasets, rename y variable name
-YX <- cbind(y,X)
-
-# Merge subject train and subject test datasets
-subject_test <- read.table('UCI_HAR_Dataset/test/subject_test.txt')
-subject_train <- read.table('UCI_HAR_Dataset/train/subject_train.txt')
-subject <- rbind(subject_train,subject_test)
 colnames(subject) <- 'subject_id'
 
-# REQUIREMENT: Merges the training and the test sets to create one data set.
-# Merge subject to data
-HAR <- cbind(subject,YX)
+# Step 4: Subset features by mean() and std()
+X_mean_std <- X[,grep("mean\\(\\)|std\\(\\)", colnames(X))]
 
-# REQUIREMENT: Extracts only the measurements on the mean and standard deviation for each measurement. 
-# Subset by mean and standard deviation
-HAR_mean <- HAR[,grep("mean()", colnames(HAR), fixed=TRUE)]
-HAR_std <- HAR[,grep("std()", colnames(HAR), fixed=TRUE)]
-HAR_wide <- cbind(HAR[,(1:3)],HAR_mean,HAR_std)
+# Step 5: Transform column headers to make descriptive
+y$activity <- tolower(y$activity)
+variable_names <- colnames(X_mean_std)
+variable_names <- sub("-mean\\(\\)","Mean",variable_names)
+variable_names <- sub("-std\\(\\)","Std",variable_names)
+variable_names <- sub("-X","X",variable_names)
+variable_names <- sub("-Y","Y",variable_names)
+variable_names <- sub("-Z","Z",variable_names)
+variable_names <- sub("fBodyBody","fBody",variable_names)
+colnames(X_mean_std) <- variable_names
 
-# REQUIREMENT: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-# Melt wide dataset
-variables <- colnames(HAR_wide[4:69])
-HAR_narrow <- melt(HAR_wide,id=c("subject_id","activity_id","activity"),measure.vars=variables)
+# Step 6: Merge into one data set
+har <- cbind(subject,y,X_mean_std)
 
-# Cast narrow dataset
-HAR_subject <- dcast(HAR_narrow, subject_id ~ variable,mean)
-HAR_activity <- dcast(HAR_narrow, activity ~ variable,mean)
-HAR_subject_activity <- dcast(HAR_narrow, subject_id + activity  ~ variable,mean)
+# Step 7: Compute mean of each feature for each subject and activity combination. 
+variables <- colnames(har[4:69])
+har_narrow <- melt(har,id=c("subject_id","activity_id","activity"),measure.vars=variables)
+har_tidy_wide <- dcast(har_narrow, subject_id + activity  ~ variable,mean)
 
-# Make the final dataset tidy and narrow
-HAR_tidy_narrow <- melt(HAR_subject_activity,id=c("subject_id","activity"),measure.vars=colnames(HAR_subject_activity[3:68]))
+# Step 8: Make data set tidy and narrow
+har_tidy_narrow <- melt(har_tidy_wide,id=c("subject_id","activity"),measure.vars=colnames(har_tidy_wide[3:68]))
 
-write.csv(HAR_subject_activity, file = "HAR_tidy_wide.csv")
+# Step 9: Save output
+write.csv(HAR_tidy_narrow, file = "HAR_tidy_narrow.csv")
+
+# Ignore:
+> mean_variables <- colnames(HAR_mean_std)
+> mean_variables <- gsub("tBody","timeBodySignals",mean_variables)
+> mean_variables <- gsub("tGravity","timeGravitySignals",mean_variables)
+> mean_variables <- gsub("fBody","frequencyBodySignals",mean_variables)
+> mean_variables <- gsub("Acc","Acceleration",mean_variables)
+> mean_variables <- gsub("Gyro","Gyroscope",mean_variables)
+> mean_variables <- gsub("Mag","Magnitude",mean_variables)
+> mean_variables <- gsub("Jerk","JerkSignals",mean_variables)
+> mean_variables <- gsub("-mean\\(\\)","_mean",mean_variables)
+> mean_variables <- gsub("-std\\(\\)","_std",mean_variables)
+> mean_variables <- gsub("-X","_Xaxis",mean_variables)
+> mean_variables <- gsub("-Y","_Yaxis",mean_variables)
+> mean_variables <- gsub("-Z","_Zaxis",mean_variables)
+> mean_variables
+write.csv(mean_variables, file = "mean_variables.csv")
