@@ -25,9 +25,9 @@ Repo Files
 ##### Files and Directories:
 
 * [README.md] - This file.
-* [CodeBook.md] - File describing the data in HAR-tidy.csv
+* [CodeBook.md] - Descriptions of the input data, scripted commands, and expected output file. 
 * [/UCI_HAR_Dataset] - Directory containing the original dataset
-* [run_analysis.R] - This is an R scipt containing the commands used to process the UCO HAR dataset and produce the `HAR_tidy_narrow.txt` file.
+* [run_analysis.R] - This is an R scipt containing the commands used to process the UCI HAR dataset and produce the `HAR_tidy_narrow.txt` file.
 
 
 Original Data Source
@@ -41,11 +41,7 @@ Original Data Source
 
 ## Required R Packages
 
-The R packages `plyr` and `reshape2` are required to run this script. Package installation:
-
-```install.package("plyr")```
-
-```install.package("reshape2")```
+The R packages `plyr` and `reshape2` are required to run this script.
 
 
 
