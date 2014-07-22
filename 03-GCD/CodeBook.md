@@ -95,7 +95,7 @@ Data Processing Steps
 
 
 Output
------------
+--------------
 One file, `har_tidy_narrow.txt`, is output by the script. 
 
 <table>
@@ -113,6 +113,7 @@ One file, `har_tidy_narrow.txt`, is output by the script.
   <td>Tidy, comma-seprated data set of the mean per activity, per subject of the mean and Standard deviation of the Human Activity Recognition Using Smartphones Dataset</td>
  </tr>
  </table>
+ 
 
 #####Description of columns in output file:
 <table>
@@ -139,8 +140,10 @@ One file, `har_tidy_narrow.txt`, is output by the script.
   <td>The computed mean of the feature variable for each subject and activity.</td>
  </tr>
  </table>
+ 
+
 Variable Description
------------
+--------------
 
 There are three categories of variables: features, activities, and subjects. This section provides an explanation of each variable as it is provided in the tidy output data file.
 
